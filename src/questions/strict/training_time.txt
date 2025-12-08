@@ -1,0 +1,37 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert in large-scale training.
+Your task is to extract the total wall-clock training time for {model_name} and express it in hours.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": numeric string (digits with optional decimal point) representing hours, with no units.
+- "sentence": the full sentence from the article that provides the training duration.
+
+### RULES ###
+1. Convert any reported units to hours:  
+   - minutes → divide by 60  
+   - days → multiply by 24  
+   - weeks → multiply by 168  
+   - months → convert only if the text specifies the number of days; otherwise, leave blank  
+   Expand mixed units (e.g., "10 days and 12 hours" → 252 hours).
+2. Capture the duration of the main training run for {model_name}, not fine-tuning, ablations, or inference.
+3. If multiple durations are given, choose the one that best matches the full pretraining/final training run.
+4. If the training time is given for ALL models/components combined (e.g., "training all 6 blocks took 144 hours"), divide by the number of models/components to get the time for ONE model (e.g., 144/6 = 24 hours). We want the training time per individual model, not the total.
+5. If the article does not mention a training duration, return ["", ""].
+
+### EXAMPLES ###
+Context: "{model_name} trained for 10 days on our H100 cluster."
+Output: ["240", "{model_name} trained for 10 days on our H100 cluster."]
+
+Context: "Fine-tuning took 36 hours, while full pretraining lasted 3.5 weeks."
+Output: ["588", "Fine-tuning took 36 hours, while full pretraining lasted 3.5 weeks."]
+
+Context: "We will publish timing once the run completes."
+Output: ["", ""]
+
+Always return the supporting sentence verbatim.
+

@@ -1,0 +1,43 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor. 
+Your task is to extract the number of parameters for the model {model_name}. The exact surface form of the name in the text may differ, but it should clearly refer to the same model.
+Return exactly one answer. If multiple models are mentioned, choose the one that best matches {model_name}.
+
+
+Return a Python list with two strings: the digits-only parameter count, and the full sentence containing the information, in the following form:
+["10000", "our model contains 10k parameters"]
+
+
+Follow these rules strictly:
+1. Integer conversion: Convert units into a full integer with ALL zeros expanded. Treat 'k'/'thousand' = 1000; 'M'/'million' = 1000000; 'B'/'bn'/'billion' = 1000000000; 'T'/'tn'/'trillion' = 1000000000000.
+2. Digits only: The value must be a string of digits only (no separators, no spaces, no scientific notation, no unit suffix, no text). Examples of valid outputs: "7000000000", "1500000". Invalid: "7B", "1.5M", "1e12", "1,500,000".
+3. No estimation: Extract the number only if it is explicitly stated (or immediately implied by an adjacent unit like "7B"). Do not invent values.
+4. Missing info: If the number of parameters is not explicitly mentioned, return an empty string ("") for .
+
+
+Example A (billion spelled):
+Context: "The model has 7 billion parameters."
+Output: ["7000000000", "The model has 7 billion parameters."]
+
+Example B (B suffix):
+Context: "...with its 175B parameters..."
+Output: ["175000000000", "...with its 175B parameters..."]
+
+Example C (M with decimal):
+Context: "...with 1.5M parameters..."
+Output: ["1500000", "...with 1.5M parameters..."]
+
+Example D (scientific notation):
+Context: "...model size is 1e12 parameters..."
+Output: ["1000000000000", "...model size is 1e12 parameters..."]
+
+Example E (missing information):
+Context: "..."
+Output: ["", ""]
+
+Where "..." represents the rest of the sentence; you have to write the entire sentence.

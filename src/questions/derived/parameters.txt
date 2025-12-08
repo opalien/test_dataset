@@ -1,0 +1,27 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Extract the number of parameters for {model_name}. If not explicitly stated, compute it only when the text provides enough numeric details to do so with high confidence (e.g., explicit unit like 1.5B, or a clear formula such as 24 layers × 4096 hidden size leading to a stated total). If you cannot confidently compute it, return blanks.
+
+Return one Python list with two strings: ["digits_only", "sentence"].
+- "digits_only": full integer with all zeros expanded, digits only (no units/commas); convert k/M/B/T prefixes and scientific notation.
+- "sentence": the sentence (or combined clause) that supplies the explicit number or the numbers you used to compute it. If derived from multiple numeric cues, include the sentence that makes the derivation clear.
+
+Rules:
+1) Prefixes: k=1,000; M=1,000,000; B/bn=1,000,000,000; T=1,000,000,000,000. Expand decimals (1.5M → 1500000) and scientific notation.
+2) Only answer when explicit or directly computable from provided numbers. Do not guess.
+3) If you cannot extract or compute confidently, return ["", ""].
+
+Examples:
+Context: "The model has 7 billion parameters."
+Output: ["7000000000", "The model has 7 billion parameters."]
+
+Context: "We use 24 layers with 4096 hidden size, totaling 1.5B parameters."
+Output: ["1500000000", "We use 24 layers with 4096 hidden size, totaling 1.5B parameters."]
+
+Context: "Model size is comparable to BERT-base."
+Output: ["", ""]  (not enough to compute safely)

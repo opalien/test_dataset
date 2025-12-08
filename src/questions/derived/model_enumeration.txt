@@ -1,0 +1,19 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### TASK ###
+You are an expert in extracting information from scientific articles.
+Extract all models newly introduced in the article above. Prefer exact surface forms; if the name is not explicitly written but is unambiguously derivable from the title/header/repository path, return that derived name. If you cannot confidently derive a name, return an empty list.
+
+Return a Python-formatted list:
+["model-1-3B", "model-2-1B", ..., "model-n-kB"]
+(the "..." illustrates a list and must not appear in your answer)
+
+Rules:
+- Include only models that are contributions of this article. Exclude baselines and unrelated prior work.
+- Do not invent names. Only include (a) explicitly written names or (b) names clearly implied by the article title or repository path when no other name is given.
+- If no clear model names can be extracted or derived, return [].
+
+Your response must contain only the list in valid Python syntax.

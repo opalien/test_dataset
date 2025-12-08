@@ -1,0 +1,19 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Identify the training hardware for {model_name}. Use explicit mentions; if absent, derive only when the text unambiguously specifies the accelerator type used for training (e.g., a clear statement of GPUs/TPUs/ASICs in the training setup). If unsure, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": hardware name(s) only (vendor + accelerator/class), with counts removed (e.g., "NVIDIA H100 GPUs", "Google TPU v5p pods").
+- "sentence": the sentence that states or implies the training hardware used for {model_name}. If derived, include the sentence that makes the hardware choice unambiguous.
+
+Rules:
+1) Focus on training hardware for {model_name}; ignore inference/eval hardware.
+2) Remove counts (e.g., "512 NVIDIA H100 GPUs" → "NVIDIA H100 GPUs").
+3) Only derive when the text clearly ties a specific accelerator to the training run (e.g., "training ran on H100 GPUs"). Do not guess from vague mentions.
+4) If nothing explicit or confidently derivable, return ["", ""].
+5) Use the COMPLETE hardware identifier with format: {Brand} {Model} {Variant} (e.g., "NVIDIA GeForce GTX 1080 Ti GPU", "NVIDIA Tesla V100 SXM2 32GB GPU", "Google TPU v4s"). If training was not on GPU, specify the CPU or other hardware (e.g., "Intel Core i7-7700K CPU").

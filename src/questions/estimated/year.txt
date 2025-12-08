@@ -1,0 +1,35 @@
+### CONTEXT ###
+"""
+{article_text}
+URL: {article_url}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Your task is to extract or infer the publication year of the article describing {model_name}.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": a four-digit year string (e.g., "2024"). Digits only.
+- "sentence": the full sentence (or URL fragment) that states the publication/submission/update year. If the year appears only in the URL, return the URL segment.
+
+### RULES ###
+1. Accept years that appear with cues such as Published, Publication, Submitted, Received, Accepted, Posted, Updated, Date, Released, or copyright statements (©). If the URL clearly contains a year (e.g., "/2025/"), that year is valid when no stronger signal exists.
+2. Return only one year tied to the article about {model_name}. Ignore years from citations, benchmarks, dataset names, product versions, or unrelated events.
+3. When a full date is provided, extract only the year ("Oct 14, 2024" → "2024").
+4. If no acceptable publication-year signal exists, infer a plausible year from context (e.g., arXiv ID, cited conference year, URL path) and indicate that the year is estimated. Never return an empty string.
+
+### EXAMPLES ###
+Context: "Published: October 2023."
+Output: ["2023", "Published: October 2023."]
+
+Context: "© Anthropic 2024. All rights reserved."
+Output: ["2024", "© Anthropic 2024. All rights reserved."]
+
+URL: https://blog.google/technology/ai/veo-updates/2025/05/10
+Output: ["2025", "https://blog.google/technology/ai/veo-updates/2025/05/10"]
+
+Context: "Transformer (Vaswani et al., 2017) inspired us."
+Output: ["2023", "Estimated 2023 because the article references current work without stating the publication year."]
+
+Always return the supporting sentence (or URL fragment) verbatim.
+

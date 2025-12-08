@@ -1,0 +1,18 @@
+### CONTEXT ###
+"""
+{article_text}
+URL: {article_url}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Extract the publication year of the article describing {model_name}. If the year is not stated directly, derive it only from explicit dates or URL segments that clearly correspond to this article. If uncertain, return blanks.
+
+Return one Python list with two strings: ["value", "sentence_or_url"].
+- "value": four-digit year string (digits only).
+- "sentence_or_url": the sentence or URL fragment that provides the year.
+
+Rules:
+1) Accept cues like Published/Submitted/Accepted/Updated/Posted/Released or © statements. A URL year is acceptable only when it clearly belongs to this article.
+2) Ignore years from citations, datasets, benchmarks, or unrelated events.
+3) If no explicit or confidently derivable year exists, return ["", ""].

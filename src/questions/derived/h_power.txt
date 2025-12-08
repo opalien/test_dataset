@@ -1,0 +1,17 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Extract the per-accelerator power draw (in watts) used to train {model_name}. If not explicitly given, you may compute it only when the text provides a clear total power and accelerator count that lets you derive per-accelerator watts confidently. Otherwise, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing watts per accelerator (no units/commas). Convert kW/MW as needed; divide pod/rack power by accelerator count only if both numbers are explicit.
+- "sentence": the sentence containing the power figure, or the sentence(s) that make the derivation unambiguous.
+
+Rules:
+1) Conversions: 1 kW = 1000 W; 1 MW = 1,000,000 W. Expand decimals (1.5 kW → "1500").
+2) Only per-accelerator power tied to training {model_name}. Ignore cluster totals unless you can safely divide by a stated accelerator count.
+3) Do not guess or average without explicit numbers. If uncertain, return ["", ""].

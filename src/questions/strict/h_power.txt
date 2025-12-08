@@ -1,0 +1,31 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Your task is to extract the per-accelerator power draw used to train {model_name}. The text may describe watts per GPU/TPU/ASIC or per accelerator class; only use figures explicitly tied to {model_name}'s training hardware.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": digits only (no units, commas, or text) representing the power in watts for a single accelerator. Perform unit conversions when needed.
+- "sentence": the full sentence from the article that contains the power value.
+
+### RULES ###
+1. Convert units to watts (W). Use: 1 kW = 1,000 W; 1 MW = 1,000,000 W. Expand decimals fully (e.g., 1.5 kW → "1500").
+2. Only capture per-accelerator power ratings associated with training {model_name}. Ignore rack-level draw unless it is explicitly per accelerator.
+3. Do not infer or average values. If multiple per-accelerator ratings exist, choose the one tied to the main training run.
+4. If the article does not provide a per-accelerator power figure, return ["", ""].
+
+### EXAMPLES ###
+Context: "Each H100 we used to train {model_name} draws 1.9 kW under load."
+Output: ["1900", "Each H100 we used to train {model_name} draws 1.9 kW under load."]
+
+Context: "Training {model_name} consumed 15 MW across the whole pod."
+Output: ["", ""]
+
+Context: "Every TPU chip ran at 750 W during {model_name}'s pretraining."
+Output: ["750", "Every TPU chip ran at 750 W during {model_name}'s pretraining."]
+
+Where "..." denotes the rest of the sentence; always return the entire sentence verbatim.
+

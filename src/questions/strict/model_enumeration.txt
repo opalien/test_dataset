@@ -1,0 +1,37 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### TASK ###
+You are an expert in extracting information from scientific articles.
+You must extract all the models that are newly introduced in the article above.
+Some models may be mentioned in the article without being a contribution from the authors through this article; these should not be listed.
+You must return a Python-formatted list of names that best characterize each model in the following format:
+["model-1-3B", "model-2-1B", ..., "model-n-kB"]
+(the "..." here is enumeration notation to show that there is no size limit. It should not appear in your response)
+
+Important recognition hints:
+- Look for names in title, abstract, introduction, methods, figure captions, and tables (e.g., "We introduce Ling-1T"; "Baseline: DDPM").
+- Proper nouns and model families are often Capitalized or Hyphenated (e.g., "Claude Haiku 4.5", "Ring-1T", "MiniMax M2").
+- Do not invent names; prefer exact surface forms present in the text.
+- URL-aware: if the text is a model card/page (e.g., Hugging Face), the repository name in the header/path (like inclusionAI/Ling-1T) is a strong candidate; keep the repo name as the model name ("Ling-1T").
+- Exclude datasets/benchmarks/metrics (e.g., ImageNet, COCO, BLEU, PSNR) and exclude task names.
+- Keep distinct variants as separate entries (e.g., "Veo 3", "Veo 3.1", "Veo 2").
+- If nothing is mentioned, return [] (empty array).
+
+Your response must contain only the list and nothing else, and must be in valid Python format.
+If multiple models are presented with the same name, add the differentiating element to each model's name in the response.
+
+Examples (illustrative):
+Input: "We present TheModel in three different sizes that are 1B, 4B and 1.3T..."
+Output: ["TheModel-1B", "TheModel-4B", "TheModel-1.3T"]
+
+Examples (illustrative):
+Input: "The paper provides OtherModel with 2 different architectures; one with transformers, the second with CNN"
+Output: ["OtherModel-Transformer", "OtherModel-CNN"]
+
+Examples (illustrative):
+Input: "We introduce Ring-1T and compare to Ring-mini-linear-2.0 and DDPM..."
+Output: ["Ring-1T"]
+Explanation: Here only Ring-1T is introduced and should therefore appear in the response. However, Ring-mini-linear-2.0 and DDPM are not models specifically presented in this article.

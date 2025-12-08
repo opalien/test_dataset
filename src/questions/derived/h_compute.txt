@@ -1,0 +1,22 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Capture the per-accelerator compute throughput (FLOP/s) of the hardware that trained {model_name}. If not explicitly stated, you may derive it only when the text provides a clear total FLOP/s and accelerator count so you can compute a per-accelerator value. Otherwise, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing FLOP/s per accelerator. Apply unit multipliers (GFLOP/s, TFLOP/s, PFLOP/s, EFLOP/s) and expand decimals.
+- "sentence": the sentence with the compute spec, or the sentence(s) that make the derivation unambiguous.
+
+Rules:
+1) Conversions:  
+   - 1 GFLOP/s = 1,000,000,000 FLOP/s  
+   - 1 TFLOP/s = 1,000,000,000,000 FLOP/s  
+   - 1 PFLOP/s = 1,000,000,000,000,000 FLOP/s  
+   - 1 EFLOP/s = 1,000,000,000,000,000,000 FLOP/s  
+   Apply similar logic for TOPS only when explicitly equivalent.
+2) Derive per-accelerator only if total FLOP/s and accelerator count are both explicit. Otherwise, require a per-accelerator statement.
+3) If no explicit or safely derivable value exists, return ["", ""].

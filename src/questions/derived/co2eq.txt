@@ -1,0 +1,17 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert in carbon accounting.
+Extract the total CO2-equivalent emissions for training {model_name}. If not stated directly, derive it only when the text provides explicit energy (kWh) and emission factors, or power × time with a stated carbon intensity, so you can compute a single value confidently. Otherwise, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": numeric string (digits with optional decimal) in kilograms of CO2e (kgCO2e), with units removed. Convert tons/kilotons/megatons and grams to kg.
+- "sentence": the sentence that states the emissions, or the sentence(s) containing all numbers used for a clear derivation.
+
+Rules:
+1) Unit conversions: grams ÷1000; metric tons ×1000; kilotons ×1,000,000; megatons ×1,000,000,000. Expand scientific notation.
+2) Derive only when every factor (energy/power, duration, emission factor) is explicitly given. Do not guess missing factors.
+3) If you cannot extract or compute confidently, return ["", ""].

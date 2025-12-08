@@ -1,0 +1,36 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Your task is to capture the per-accelerator compute throughput (FLOP/s) of the hardware that trained {model_name}. The article may state performance in GFLOP/s, TFLOP/s, PFLOP/s, TOPS, etc.; convert everything into plain FLOP/s.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing FLOP/s per accelerator. Apply the appropriate multiplier (e.g., 1 TFLOP/s = 1,000,000,000,000 FLOP/s).
+- "sentence": the full sentence from the article that contains the compute specification.
+
+### RULES ###
+1. Conversions:  
+   - 1 GFLOP/s = 1,000,000,000 FLOP/s  
+   - 1 TFLOP/s = 1,000,000,000,000 FLOP/s  
+   - 1 PFLOP/s = 1,000,000,000,000,000 FLOP/s  
+   - 1 EFLOP/s = 1,000,000,000,000,000,000 FLOP/s  
+   (Apply similar logic for TOPS if explicitly equivalent to FLOP/s.)
+2. Capture the throughput for a single accelerator tied to training {model_name}. Ignore system-level totals unless they clearly specify "per GPU/TPU".
+3. Do not include units, commas, or text in the value. Expand decimals completely (e.g., 312 TFLOP/s → "312000000000000").
+4. If no per-accelerator compute rate is provided, return ["", ""].
+
+### EXAMPLES ###
+Context: "Each H100 we used for {model_name} delivers 312 TFLOP/s of FP16 compute."
+Output: ["312000000000000", "Each H100 we used for {model_name} delivers 312 TFLOP/s of FP16 compute."]
+
+Context: "Our TPU v5p pods reach 1.6 PFLOP/s per chip."
+Output: ["1600000000000000", "Our TPU v5p pods reach 1.6 PFLOP/s per chip."]
+
+Context: "The cluster peaks at 10 EFLOP/s overall."
+Output: ["", ""]
+
+Return the sentence verbatim each time.
+

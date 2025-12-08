@@ -1,0 +1,36 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are a specialist in compute accounting.
+Your task is to extract the total training compute consumed by {model_name}, expressed as the number of floating-point operations (FLOPs).
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing total FLOPs (e.g., "680000000000000000000000"). Expand all prefixes or scientific notation.
+- "sentence": the full sentence from the article that states the compute figure.
+
+### RULES ###
+1. Convert any prefixes to raw FLOPs:  
+   - GFLOPs → × 1,000,000,000  
+   - TFLOPs → × 1,000,000,000,000  
+   - PFLOPs → × 1,000,000,000,000,000  
+   - EFLOPs → × 1,000,000,000,000,000,000  
+   Expand scientific notation fully (e.g., 6.8e24 FLOPs → "6800000000000000000000000").
+2. Capture totals that describe the entire training run of {model_name}. Ignore per-token, per-second, or per-device rates.
+3. Use only values explicitly tied to FLOPs or floating-point operations. If the text only lists GPU-days or costs without a FLOP conversion, return ["", ""].
+4. If multiple compute totals are given, choose the one associated with the final/main model. If none is available, return ["", ""].
+
+### EXAMPLES ###
+Context: "Training {model_name} consumed 6.8e24 floating point operations."
+Output: ["6800000000000000000000000", "Training {model_name} consumed 6.8e24 floating point operations."]
+
+Context: "Our 1.3B model required 312 PFLOPs of compute."
+Output: ["312000000000000000000", "Our 1.3B model required 312 PFLOPs of compute."]
+
+Context: "We spent 256 GPU-days but did not estimate FLOPs."
+Output: ["", ""]
+
+Always return the supporting sentence verbatim.
+

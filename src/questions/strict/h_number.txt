@@ -1,0 +1,31 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Your task is to extract the total number of accelerators (GPUs/TPUs/custom chips) used to train {model_name}. The figure must refer explicitly to training the target model.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing the count (e.g., "512"). Remove commas, spaces, units, or prefixes like "x".
+- "sentence": the full sentence from the article that states the accelerator count.
+
+### RULES ###
+1. Capture the total accelerator count for the training run of {model_name}. Ignore counts for inference clusters, evaluation rigs, or other models.
+2. Normalize formats: "8×", "8 x", or "eight" (when clearly numeric) must be converted to digits (e.g., "8"). Do not include node counts or rack counts unless they directly equal the accelerator total.
+3. Avoid unrelated numbers such as GPU memory size, FLOP targets, or batch sizes.
+4. If the accelerator count is not explicitly mentioned, return ["", ""].
+
+### EXAMPLES ###
+Context: "We trained {model_name} on 512 NVIDIA H100 GPUs across 32 nodes."
+Output: ["512", "We trained {model_name} on 512 NVIDIA H100 GPUs across 32 nodes."]
+
+Context: "Training relied on eight TPU v5p pods."
+Output: ["8", "Training relied on eight TPU v5p pods."]
+
+Context: "Training ran on NVIDIA hardware."
+Output: ["", ""]
+
+Always return the entire supporting sentence verbatim.
+

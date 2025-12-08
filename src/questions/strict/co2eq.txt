@@ -1,0 +1,36 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert in carbon accounting.
+Your task is to extract the total CO2-equivalent emissions attributed to training {model_name}.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": a numeric string (digits with optional decimal point) representing kilograms of CO2e (kgCO2e). No units or additional text.
+- "sentence": the full sentence from the article that reports the emissions value.
+
+### RULES ###
+1. Convert any reported units to kilograms (kgCO2e):  
+   - grams → divide by 1,000  
+   - metric tons → multiply by 1,000  
+   - kilotons → multiply by 1,000,000  
+   - megatons → multiply by 1,000,000,000  
+   Expand scientific notation (e.g., 3.2e5 kg → "320000").
+2. Capture the figure covering the full training run of {model_name}. Ignore lifecycle, inference, or unrelated emissions.
+3. If a range is provided, select the single number most clearly tied to the final training report (prefer the explicit total over estimates).
+4. If no emissions figure is given, return ["", ""].
+
+### EXAMPLES ###
+Context: "Training {model_name} emitted 210 tCO2e end-to-end."
+Output: ["210000", "Training {model_name} emitted 210 tCO2e end-to-end."]
+
+Context: "Our carbon audit shows 480 kg CO2e for {model_name}'s fine-tuning stage."
+Output: ["480", "Our carbon audit shows 480 kg CO2e for {model_name}'s fine-tuning stage."]
+
+Context: "We did not measure carbon emissions."
+Output: ["", ""]
+
+Always return the supporting sentence verbatim.
+

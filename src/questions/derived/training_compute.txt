@@ -1,0 +1,18 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are a specialist in compute accounting.
+Extract the total training compute for {model_name} in FLOPs. If the article does not state FLOPs directly, derive it only when explicit components (e.g., accelerator TFLOP/s × count × hours/seconds) allow a confident calculation. Otherwise, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": digits only for total FLOPs (expand prefixes/scientific notation).
+- "sentence": the sentence that states the compute, or the sentence(s) providing all numbers you used to derive it.
+
+Rules:
+1) Unit multipliers: GFLOPs = ×1,000,000,000; TFLOPs = ×1,000,000,000,000; PFLOPs = ×1,000,000,000,000,000; EFLOPs = ×1,000,000,000,000,000,000. Expand decimals and scientific notation.
+2) Include totals for the full training run only. Ignore per-step/per-device rates unless you convert them using explicit step counts/time.
+3) Only compute when every factor is explicitly present (throughput, count, duration/steps). Do not guess missing pieces.
+4) If you cannot extract or compute confidently, return ["", ""].

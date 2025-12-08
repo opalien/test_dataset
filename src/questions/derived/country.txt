@@ -1,0 +1,17 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Extract the country associated with the organization that produced {model_name}. Use explicit statements; if absent, derive only when affiliations/addresses clearly indicate a single country. If unsure, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": country name only.
+- "sentence": the sentence (or affiliation line) that states or makes the country clear.
+
+Rules:
+1) Focus on the producing organization’s country, not datasets or unrelated references.
+2) If multiple countries appear but the producing organization is unambiguous, pick that country. If ambiguity remains, return ["", ""].
+3) Do not guess; only use explicit or unambiguous affiliation cues.

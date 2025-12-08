@@ -1,0 +1,18 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Extract the total number of accelerators (GPUs/TPUs/custom chips) used to train {model_name}. If the exact count is not stated, derive it only when the text provides explicit node/pod counts and accelerators per node so you can compute a single number confidently. Otherwise, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": digits only representing the total accelerator count.
+- "sentence": the sentence that states the count, or the sentence(s) that make the derived count clear (e.g., "8 nodes with 8 GPUs each").
+
+Rules:
+1) Training accelerators only; ignore inference/eval counts.
+2) Normalize textual numbers (e.g., "eight" → "8") when the mapping is unambiguous.
+3) Derive totals only when both factors are explicit (e.g., nodes × GPUs per node). No guesses from vague phrasing.
+4) If you cannot extract or compute confidently, return ["", ""].

@@ -1,0 +1,31 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert information extractor.
+Your task is to determine the country (or sovereign territory) where the training of {model_name} took place. The country name might appear alongside a city, lab, or data center. When the article does not give an explicit country, provide your most defensible estimate and say that it is estimated.
+
+Return exactly one Python list with two strings: ["value", "sentence"].
+- "value": the country/territory name exactly as stated (e.g., "United States", "France", "United Arab Emirates"). Do not include cities, facilities, or regions unless the country name itself is the only clue.
+- "sentence": the full sentence from the article that ties the training location to {model_name}.
+
+### RULES ###
+1. Prefer explicit statements such as "trained in the United States" or "run out of our Paris, France facility". If multiple countries are listed, choose the one directly associated with the core training run of {model_name}.
+2. Ignore references to inference, deployment, or unrelated research sites.
+3. If the article mentions only a city/region, you may infer the associated country even if the country name is not spelled out (e.g., "Paris" → "France"), but state in the sentence that this is an estimate.
+4. If no country is mentioned for the training of {model_name}, use contextual clues (organization HQ, data center hints, collaborators) to provide a best-effort estimate. Never return an empty string; label the sentence as an estimate when necessary.
+
+### EXAMPLES ###
+Context: "{model_name} was trained entirely in the United States using our Virginia cluster."
+Output: ["United States", "{model_name} was trained entirely in the United States using our Virginia cluster."]
+
+Context: "Pretraining happened at our Zurich, Switzerland research lab."
+Output: ["Switzerland", "Pretraining happened at our Zurich, Switzerland research lab."]
+
+Context: "Our engineers collaborated globally."
+Output: ["United States", "Estimated United States because the company says training used its Virginia-based cluster."]
+
+Always return the full supporting sentence verbatim.
+

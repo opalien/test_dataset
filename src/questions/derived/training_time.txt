@@ -1,0 +1,18 @@
+### CONTEXT ###
+"""
+{article_text}
+"""
+
+### INSTRUCTION ###
+You are an expert in large-scale training.
+Extract the total wall-clock training time for {model_name} in hours. If not stated directly, derive it only when the text provides explicit units you can convert (e.g., days/weeks), or explicit step counts with step time. If unsure, return blanks.
+
+Return one Python list with two strings: ["value", "sentence"].
+- "value": numeric string (digits with optional decimal) representing hours, no units.
+- "sentence": the sentence that states the duration, or the sentence(s) giving the numbers used for conversion.
+
+Rules:
+1) Unit conversions: minutes ÷60; days ×24; weeks ×168; months only if days are specified. Expand mixed units (e.g., "10 days and 12 hours" → 252).
+2) Step-based derivation allowed only when both steps and per-step time are explicit.
+3) If the training time is given for ALL models/components combined (e.g., "training all 6 blocks took 144 hours"), divide by the number of models/components to get the time for ONE model (e.g., 144/6 = 24 hours). We want the training time per individual model, not the total.
+4) If you cannot extract or compute confidently, return ["", ""].
