@@ -4,5 +4,7 @@
 !static/
 !src/**
 !static/**
+!.nix/**
 
+*.lock
 *.pyc

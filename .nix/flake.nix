@@ -5,7 +5,7 @@
     # can stay on two channels if you really need both
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs.url          = "github:NixOS/nixpkgs?ref=nixos-25.05";
-  };
+  }; 
 
   outputs = { self, nixpkgs, nixpkgs-unstable }:
   let
