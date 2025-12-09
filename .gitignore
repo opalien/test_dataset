@@ -5,6 +5,8 @@
 !src/**
 !static/**
 !.nix/**
+!requirements.txt
+!readme.md
 
 *.lock
 *.pyc

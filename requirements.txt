@@ -1,0 +1,7 @@
+dataset
+google-generativeai
+matplotlib
+numpy
+pandas
+rapidfuzz
+requests
