@@ -8,9 +8,9 @@ def pdf_bytes_to_text(data: bytes) -> str:
     if not data:
         return ""
     try:
-        import fitz  # type: ignore
+        import pymupdf
         text_chunks: list[str] = []
-        with fitz.open(stream=data, filetype='pdf') as doc:
+        with pymupdf.open(stream=data, filetype='pdf') as doc:
             for page in doc:
                 text_chunks.append(page.get_text())
         return "\n".join(text_chunks)
