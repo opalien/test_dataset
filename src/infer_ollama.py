@@ -56,7 +56,7 @@ def main() -> None:
     parser.add_argument("--output", default="papers.json")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--offset", type=int, default=0)
-    parser.add_argument("--model", default="qwen2.5:32b")
+    parser.add_argument("--model", default="mistral-3:latest")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--timeout", type=float, default=600.0)
