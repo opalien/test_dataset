@@ -5,6 +5,7 @@
 !src/**
 !static/**
 !.nix/**
+!document/**
 !requirements.txt
 !readme.md
 !Ollama*
